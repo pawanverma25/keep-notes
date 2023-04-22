@@ -88,11 +88,6 @@ app.get("/api/user/del", async (req, res) => {
 	res.end();
 });
 
-app.post("/", (req, res) => {
-	components = req.body;
-	res.status(200).send();
-});
-
 const PORT = process.env.PORT || 8000;
 
 connectionToDB(() => {
