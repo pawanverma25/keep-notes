@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: #b4bfcc;
+}
+
+::selection {
+  color: #ECF2FF;
+  background: #3E54AC;
+}
+
+body::-webkit-scrollbar, .NoteDiv::-webkit-scrollbar {
+  display: none;
+}
+
+.toggle-checkbox:checked {
+  @apply: right-0 border-green-400;
+  right: 0;
+}
+
+.toggle-checkbox {
+  border-color: #b4bfcc;
+}
+
+.toggle-label {
+  background-color: #b4bfcc;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  @apply: bg-green-400;
+}
