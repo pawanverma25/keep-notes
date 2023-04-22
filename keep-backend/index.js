@@ -49,14 +49,15 @@ app.get("/api/", async (req, res) => {
 		.collection("notes")
 		.findOne({ email: req.user.email });
 	if (userData) res.send(userData.notes.sort(comp));
-	else if (req.user) {
-		db.collection("notes").insertOne({
-			email: req.user.email,
-			name: req.user.displayName,
-			notes: [],
-		});
+	else {
+		if (req.user)
+			db.collection("notes").insertOne({
+				email: req.user.email,
+				name: req.user.displayName,
+				notes: [],
+			});
+		res.send([]);
 	}
-	res.send([]);
 	res.end();
 });
 
