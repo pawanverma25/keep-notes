@@ -39,7 +39,7 @@ const UserProfileComponent = ({ setProfileToggle, setComponentList }) => {
 			});
 			const token = await user.getIdToken();
 			const headers = { authtoken: token };
-			await axios.get("https://keep-notes-phi.vercel.app/api/user/change", {
+			await axios.get("https://localhost:8000/api/userchange/", {
 				headers,
 			});
 
@@ -286,7 +286,7 @@ const UserProfileComponent = ({ setProfileToggle, setComponentList }) => {
 							}
 							const token = await user.getIdToken();
 							const headers = { authtoken: token };
-							await axios.get("http://localhost:8000/api/user/del", {
+							await axios.get("http://localhost:8000/api/userdel", {
 								headers,
 							});
 							await deleteUser(user);

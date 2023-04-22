@@ -54,7 +54,7 @@ const App = () => {
 		if (user) onComponentListChangeAsync(baseUrl, user, newComponentList);
 	};
 
-	const baseUrl = "https://keep-notes-phi.vercel.app/api/";
+	const baseUrl = "https://localhost:8000/api/";
 	const [componentList, setComponentList] = useState([]);
 	const { user, isLoading } = useUser(null);
 	const [loginToggle, setLoginToggle] = useState(false);
@@ -67,7 +67,7 @@ const App = () => {
 				const token = await user.getIdToken();
 				const headers = { authtoken: token };
 				setLodingData(true);
-				let response = await axios.get(baseUrl, {
+				let response = await axios.get(baseUrl + "/notes/", {
 					headers,
 				});
 				setLodingData(false);
