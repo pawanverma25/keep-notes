@@ -1,5 +1,4 @@
 /DataBase/
 /node_modules
-credentials.json
 /.env
 .vercel
