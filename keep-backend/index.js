@@ -5,11 +5,14 @@ import admin from "firebase-admin";
 import path from "path";
 import "dotenv/config";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const credentials = JSON.parse(fs.readFileSync("credentials.json"));
+const credentials = JSON.parse(
+	fs.readFileSync(path.join(__dirname, "credentials.json"))
+);
 
 admin.initializeApp({
 	credential: admin.credential.cert(credentials),
@@ -17,10 +20,13 @@ admin.initializeApp({
 
 const app = express();
 app.use(express.json());
-// app.use(express.static(path.join(__dirname, "../build")));
-// app.get(/^(?!\/api).+/, (req, res) => {
-// 	res.sendFile(path.join(__dirname, "../build/index.html"));
-// });
+app.use(express.static(path.join(__dirname, "./build")));
+
+app.use(cors());
+
+app.get(/^(?!\/api).+/, (req, res) => {
+	res.sendFile(path.join(__dirname, "./build/index.html"));
+});
 
 app.use(async (req, res, next) => {
 	const { authtoken } = req.headers;
@@ -36,32 +42,32 @@ app.use(async (req, res, next) => {
 	next();
 });
 
-const comp = (a, b) => {
-	if (a.pinned === b.pinned) {
-		return a.date < b.date ? 1 : -1;
-	} else {
-		return a.pinned < b.pinned ? 1 : -1;
-	}
-};
-
-app.get("/api/", async (req, res) => {
-	const userData = await db
-		.collection("notes")
-		.findOne({ email: req.user.email });
-	if (userData) res.send(userData.notes.sort(comp));
-	else {
-		if (req.user)
+app.get("/api", async (req, res) => {
+	if (req.user !== {}) {
+		const userData = await db
+			.collection("notes")
+			.findOne({ email: req.user.email });
+		if (userData) {
+			res.send(userData.notes);
+			return;
+		} else {
 			db.collection("notes").insertOne({
 				email: req.user.email,
 				name: req.user.displayName,
 				notes: [],
 			});
-		res.send([]);
+		}
 	}
+	res.send([]);
 	res.end();
 });
 
-app.put("/api/change/", async (req, res) => {
+app.use((req, res, next) => {
+	if (req.user) next();
+	else res.sendStatus(401);
+});
+
+app.put("/api/change", async (req, res) => {
 	const notes = req.body;
 	await db.collection("notes").updateOne(
 		{ email: req.user.email },
@@ -71,11 +77,6 @@ app.put("/api/change/", async (req, res) => {
 	);
 	res.sendStatus(200);
 	res.end();
-});
-
-app.use((req, res, next) => {
-	if (req.user) next();
-	else res.sendStatus(401);
 });
 
 app.get("/api/user/change", async (req, res) => {

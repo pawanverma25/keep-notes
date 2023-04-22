@@ -39,7 +39,7 @@ const UserProfileComponent = ({ setProfileToggle, setComponentList }) => {
 			});
 			const token = await user.getIdToken();
 			const headers = { authtoken: token };
-			await axios.get("https://localhost:8000/api/userchange/", {
+			await axios.get("https://keepnotes-kappa.vercel.app/api/user/change", {
 				headers,
 			});
 
@@ -286,9 +286,12 @@ const UserProfileComponent = ({ setProfileToggle, setComponentList }) => {
 							}
 							const token = await user.getIdToken();
 							const headers = { authtoken: token };
-							await axios.get("http://localhost:8000/api/userdel", {
-								headers,
-							});
+							await axios.get(
+								"https://keepnotes-kappa.vercel.app/api/user/del",
+								{
+									headers,
+								}
+							);
 							await deleteUser(user);
 							setProfileToggle(false);
 							setComponentList([]);

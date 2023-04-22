@@ -16,10 +16,14 @@ const comp = (a, b) => {
 	}
 };
 
-const onComponentListChangeAsync = async (baseUrl, user, newComponentList) => {
+const onComponentListChangeAsync = async (user, newComponentList) => {
 	const token = await user.getIdToken();
 	const headers = { authtoken: token };
-	await axios.put(baseUrl + "change/", newComponentList, { headers });
+	await axios.put(
+		"https://keepnotes-kappa.vercel.app/api/change",
+		newComponentList,
+		{ headers }
+	);
 };
 
 const App = () => {
@@ -32,7 +36,7 @@ const App = () => {
 			})
 			.sort(comp);
 		setComponentList(newComponentList);
-		if (user) onComponentListChangeAsync(baseUrl, user, newComponentList);
+		if (user) onComponentListChangeAsync(user, newComponentList);
 	};
 	const onComponentChange = (newComponent) => {
 		const newComponentList = componentList
@@ -42,7 +46,7 @@ const App = () => {
 			})
 			.sort(comp);
 		setComponentList(newComponentList);
-		if (user) onComponentListChangeAsync(baseUrl, user, newComponentList);
+		if (user) onComponentListChangeAsync(user, newComponentList);
 	};
 	const onDeleteComponent = (componentId) => {
 		const newComponentList = componentList
@@ -51,10 +55,9 @@ const App = () => {
 			})
 			.sort(comp);
 		setComponentList(newComponentList);
-		if (user) onComponentListChangeAsync(baseUrl, user, newComponentList);
+		if (user) onComponentListChangeAsync(user, newComponentList);
 	};
 
-	const baseUrl = "https://localhost:8000/api/";
 	const [componentList, setComponentList] = useState([]);
 	const { user, isLoading } = useUser(null);
 	const [loginToggle, setLoginToggle] = useState(false);
@@ -67,9 +70,12 @@ const App = () => {
 				const token = await user.getIdToken();
 				const headers = { authtoken: token };
 				setLodingData(true);
-				let response = await axios.get(baseUrl + "/notes/", {
-					headers,
-				});
+				let response = await axios.get(
+					"https://keepnotes-kappa.vercel.app/api",
+					{
+						headers,
+					}
+				);
 				setLodingData(false);
 				setComponentList(response.data);
 			}
@@ -92,8 +98,7 @@ const App = () => {
 						componentList.push(newComponent);
 						const newComponentList = [...componentList].sort(comp);
 						setComponentList(newComponentList);
-						if (user)
-							onComponentListChangeAsync(baseUrl, user, newComponentList);
+						if (user) onComponentListChangeAsync(user, newComponentList);
 					}}
 				/>
 				{(isLoading || loadingData) && (
