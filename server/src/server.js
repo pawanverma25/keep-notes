@@ -98,7 +98,7 @@ app.post("/", (req, res) => {
 	res.status(200).send();
 });
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 connectionToDB(() => {
 	console.log("successfully connected to databases");
