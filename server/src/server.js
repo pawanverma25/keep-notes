@@ -17,7 +17,7 @@ admin.initializeApp({
 
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "../../client/build")));
+// app.use(express.static(path.join(__dirname, "../../client/build")));
 
 app.use(async (req, res, next) => {
 	const { authtoken } = req.headers;
@@ -41,9 +41,9 @@ const comp = (a, b) => {
 	}
 };
 
-app.get(/^(?!\/api).+/, (req, res) => {
-	res.sendFile(path.join(__dirname, "../../client/build/index.html"));
-});
+// app.get(/^(?!\/api).+/, (req, res) => {
+// 	res.sendFile(path.join(__dirname, "../../client/build/index.html"));
+// });
 
 app.get("/api/", async (req, res) => {
 	const userData = await db
