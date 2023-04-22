@@ -39,7 +39,9 @@ const UserProfileComponent = ({ setProfileToggle, setComponentList }) => {
 			});
 			const token = await user.getIdToken();
 			const headers = { authtoken: token };
-			await axios.get("http://localhost:8000/api/user/change", { headers });
+			await axios.get("https://keep-notes-phi.vercel.app/api/user/change", {
+				headers,
+			});
 
 			if (changePass) {
 				await signInWithEmailAndPassword(auth, user.email, curPassword);

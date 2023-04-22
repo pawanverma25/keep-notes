@@ -16,10 +16,10 @@ const comp = (a, b) => {
 	}
 };
 
-const onComponentListChangeAsync = async (user, newComponentList) => {
+const onComponentListChangeAsync = async (baseUrl, user, newComponentList) => {
 	const token = await user.getIdToken();
 	const headers = { authtoken: token };
-	await axios.put("/api/change/", newComponentList, { headers });
+	await axios.put(baseUrl + "change/", newComponentList, { headers });
 };
 
 const App = () => {
@@ -32,7 +32,7 @@ const App = () => {
 			})
 			.sort(comp);
 		setComponentList(newComponentList);
-		if (user) onComponentListChangeAsync(user, newComponentList);
+		if (user) onComponentListChangeAsync(baseUrl, user, newComponentList);
 	};
 	const onComponentChange = (newComponent) => {
 		const newComponentList = componentList
@@ -42,7 +42,7 @@ const App = () => {
 			})
 			.sort(comp);
 		setComponentList(newComponentList);
-		if (user) onComponentListChangeAsync(user, newComponentList);
+		if (user) onComponentListChangeAsync(baseUrl, user, newComponentList);
 	};
 	const onDeleteComponent = (componentId) => {
 		const newComponentList = componentList
@@ -51,9 +51,10 @@ const App = () => {
 			})
 			.sort(comp);
 		setComponentList(newComponentList);
-		if (user) onComponentListChangeAsync(user, newComponentList);
+		if (user) onComponentListChangeAsync(baseUrl, user, newComponentList);
 	};
 
+	const baseUrl = "https://keep-notes-phi.vercel.app/api/";
 	const [componentList, setComponentList] = useState([]);
 	const { user, isLoading } = useUser(null);
 	const [loginToggle, setLoginToggle] = useState(false);
@@ -66,7 +67,7 @@ const App = () => {
 				const token = await user.getIdToken();
 				const headers = { authtoken: token };
 				setLodingData(true);
-				let response = await axios.get("http://localhost:8000/api/", {
+				let response = await axios.get(baseUrl, {
 					headers,
 				});
 				setLodingData(false);
@@ -91,7 +92,8 @@ const App = () => {
 						componentList.push(newComponent);
 						const newComponentList = [...componentList].sort(comp);
 						setComponentList(newComponentList);
-						if (user) onComponentListChangeAsync(user, newComponentList);
+						if (user)
+							onComponentListChangeAsync(baseUrl, user, newComponentList);
 					}}
 				/>
 				{(isLoading || loadingData) && (
