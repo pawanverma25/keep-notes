@@ -40,7 +40,6 @@ export const FormTodo = ({ todo, setTodo }) => {
 				value={todo.title}
 				onClick={(e) => (e.target.style.height = `${e.target.scrollHeight}px`)}
 				onChange={(e) => {
-					e.target.style.height = `${e.target.scrollHeight}px`;
 					setTodo({ ...todo, title: e.target.value });
 				}}></TextareaAutosize>
 			<ul className="flex flex-col my-4 marker:text-gray-400 marker:text-2xl list-disc w-[75%] mx-auto">
@@ -87,7 +86,10 @@ export const FormTodo = ({ todo, setTodo }) => {
 										]),
 									});
 									setListItemText("");
-								} else setListItemText(listItemText + e.key);
+								}
+							}}
+							onChange={(e) => {
+								setListItemText(e.target.value);
 							}}></TextareaAutosize>
 					</div>
 				</li>

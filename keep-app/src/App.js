@@ -20,7 +20,7 @@ const onComponentListChangeAsync = async (user, newComponentList) => {
 	const token = await user.getIdToken();
 	const headers = { authtoken: token };
 	await axios.put(
-		"https://keepnotes-kappa.vercel.app/api/change",
+		"https://keepnotes25.vercel.app/api/change",
 		newComponentList,
 		{ headers }
 	);
@@ -71,7 +71,7 @@ const App = () => {
 				const headers = { authtoken: token };
 				setLodingData(true);
 				let response = await axios.get(
-					"https://keepnotes-kappa.vercel.app/api",
+					"https://keepnotes25.vercel.app/api/notes",
 					{
 						headers,
 					}
